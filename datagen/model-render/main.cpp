@@ -1,3 +1,4 @@
+#include <sstream>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
 #include <osgUtil/Optimizer>
@@ -36,7 +37,7 @@ protected:
     std::string filename;
 };
 
-void scene_to_image(osg::Node* model, const std::string& filename)
+void scene_to_image(osg::Node* model, const std::string& filename, const osg::Quat& rotation)
 {
     osgViewer::Viewer viewer;
 
@@ -44,8 +45,8 @@ void scene_to_image(osg::Node* model, const std::string& filename)
     keyswitchManipulator->addMatrixManipulator('1', "Trackball", new osgGA::TrackballManipulator());
     viewer.setCameraManipulator(keyswitchManipulator.get());
 
-    uint width = 200;
-    uint height = 200;
+    uint width = 120;
+    uint height = 120;
 
     osg::ref_ptr<osg::GraphicsContext> pbuffer;
 
@@ -72,7 +73,7 @@ void scene_to_image(osg::Node* model, const std::string& filename)
 
     osg::AutoTransform* trans = new osg::AutoTransform;
     trans->addChild(model);
-    trans->setRotation(osg::Quat(0.6, -1.5, 0.5, -0.7));
+    trans->setRotation(rotation);
 
     viewer.setSceneData(trans);
     viewer.getCamera()->setClearColor(osg::Vec4(1,1,1,1));
@@ -93,10 +94,34 @@ void scene_to_image(osg::Node* model, const std::string& filename)
     viewer.frame();
 }
 
+
+osg::Quat parse_quat(const std::string& str)
+{
+    std::istringstream iss(str);
+    std::string sub;
+    iss >> sub;
+    double a = std::stod(sub);
+    iss >> sub;
+    double b = std::stod(sub);
+    iss >> sub;
+    double c = std::stod(sub);
+    iss >> sub;
+    double d = std::stod(sub);
+
+    // osg::Quat(0.6, -1.5, 0.5, -0.7)
+    return osg::Quat(a, b, c, d);
+}
+
+// argv[1] = model name
+// argv[2] = result name
+// argv[3] = rotation string
 int main(int argc, char** argv)
 {
-    osg::Node* model = osgDB::readNodeFile("/home/dmitry/Downloads/F-14A_Tomcat/F-14A_Tomcat.obj");
-    scene_to_image(model, "/home/dmitry/plane.png");
+    // osg::Node* model = osgDB::readNodeFile("/home/dmitry/Downloads/F-14A_Tomcat/F-14A_Tomcat.obj");
+    // scene_to_image(model, "/home/dmitry/plane.png");
+
+    osg::Node* model = osgDB::readNodeFile(argv[1]);
+    scene_to_image(model, argv[2], parse_quat(argv[3]));
 
     return 0;
 }

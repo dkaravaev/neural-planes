@@ -3,7 +3,6 @@ project(model_render)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-# FIND GLUT
 find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIRS})
 link_directories(${GLUT_LIBRARY_DIRS})
@@ -12,7 +11,6 @@ if(NOT GLUT_FOUND)
     message(ERROR "GLUT not found!")
 endif(NOT GLUT_FOUND)
 
-# FIND OPENGL
 find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIRS})
 link_directories(${OpenGL_LIBRARY_DIRS})
@@ -23,4 +21,5 @@ endif(NOT OPENGL_FOUND)
 
 set(SOURCE_FILES main.cpp)
 add_executable(model_render ${SOURCE_FILES})
-target_link_libraries(model_render ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} "-lOpenThreads -losg -losgUtil -losgText -losgDB -losgGA -losgViewer")
+target_link_libraries(model_render ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}
+        "-lOpenThreads -losg -losgUtil -losgText -losgDB -losgGA -losgViewer")
