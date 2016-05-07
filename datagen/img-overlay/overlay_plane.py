@@ -4,11 +4,11 @@ from PIL import Image
 
 
 class OverlayPlane:
-    BKG_X = 640
-    BKG_Y = 512
+    BKG_X = 448
+    BKG_Y = 448
 
-    MODEL_X = 200
-    MODEL_Y = 200
+    MODEL_X = 120
+    MODEL_Y = 120
 
     def __init__(self, model_filename, background_filename, result_filename):
         random.seed()
@@ -27,7 +27,7 @@ class OverlayPlane:
         d = random.uniform(-1.0, 1.0)
 
         quat = str(a) + ' ' + str(b) + ' ' + str(c) + ' ' + str(d)
-        subprocess.call(['./' + path_prefix + 'model_render', self.model_filename, plane_filename, quat],
+        subprocess.call(['./' + path_prefix + 'model_render', self.model_filename, plane_filename, quat, "120", "120"],
                         stdout=subprocess.PIPE)
 
         img = Image.open(plane_filename)
@@ -54,15 +54,10 @@ class OverlayPlane:
 
         background = Image.open(self.background_filename)
         background.paste(img, (pos_x, pos_y), img)
-        background.save(self.result_filename, 'PNG')
+        background.save(self.result_filename, 'JPEG')
 
         subprocess.call(['mogrify', '+noise', 'Gaussian', '-blur', '20', self.result_filename])
 
 
-obj = OverlayPlane('../../data/models/f14/F-14A_Tomcat.obj',
-                   '../../data/backgrounds/clearsky.jpg',
-                   '../../data/samples/sample.png')
-
-obj.produce()
 
 

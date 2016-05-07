@@ -37,16 +37,13 @@ protected:
     std::string filename;
 };
 
-void scene_to_image(osg::Node* model, const std::string& filename, const osg::Quat& rotation)
+void scene_to_image(osg::Node* model, const std::string& filename, const osg::Quat& rotation, uint width, uint height)
 {
     osgViewer::Viewer viewer;
 
-    osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
-    keyswitchManipulator->addMatrixManipulator('1', "Trackball", new osgGA::TrackballManipulator());
-    viewer.setCameraManipulator(keyswitchManipulator.get());
-
-    uint width = 120;
-    uint height = 120;
+    osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keySwitchManipulator = new osgGA::KeySwitchMatrixManipulator;
+    keySwitchManipulator->addMatrixManipulator('1', "Trackball", new osgGA::TrackballManipulator());
+    viewer.setCameraManipulator(keySwitchManipulator.get());
 
     osg::ref_ptr<osg::GraphicsContext> pbuffer;
 
@@ -108,20 +105,25 @@ osg::Quat parse_quat(const std::string& str)
     iss >> sub;
     double d = std::stod(sub);
 
-    // osg::Quat(0.6, -1.5, 0.5, -0.7)
     return osg::Quat(a, b, c, d);
 }
 
 // argv[1] = model name
 // argv[2] = result name
 // argv[3] = rotation string
+// argv[4] = width
+// argv[5] = height
 int main(int argc, char** argv)
 {
-    // osg::Node* model = osgDB::readNodeFile("/home/dmitry/Downloads/F-14A_Tomcat/F-14A_Tomcat.obj");
-    // scene_to_image(model, "/home/dmitry/plane.png");
+    auto model_name = std::string(argv[1]);
+    auto result_name = std::string(argv[2]);
+    auto rotation = std::string(argv[3]);
 
-    osg::Node* model = osgDB::readNodeFile(argv[1]);
-    scene_to_image(model, argv[2], parse_quat(argv[3]));
+    auto width = static_cast<uint>(std::stoi(argv[4]));
+    auto height = static_cast<uint>(std::stoi(argv[5]));
+
+    osg::Node* model = osgDB::readNodeFile(model_name);
+    scene_to_image(model, result_name, parse_quat(rotation), width, height);
 
     return 0;
 }
