@@ -19,7 +19,7 @@ if(NOT OPENGL_FOUND)
     message(ERROR "OpenGL not found!")
 endif(NOT OPENGL_FOUND)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp SnapImageDrawCallback.hxx SceneHandler.hxx Utils.hxx)
 add_executable(model_render ${SOURCE_FILES})
 target_link_libraries(model_render ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}
         "-lOpenThreads -losg -losgUtil -losgText -losgDB -losgGA -losgViewer")

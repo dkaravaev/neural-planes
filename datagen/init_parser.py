@@ -65,7 +65,3 @@ class InitParser:
     def model_map(self):
         kvs = [kv.split(' : ') for kv in self.config['CLASSES']['model_map'].split(', ')]
         return {kv[0]: kv[1] for kv in kvs}
-
-
-init = InitParser('../configs/sample.config')
-print(init.model_map())
