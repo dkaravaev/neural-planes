@@ -21,7 +21,7 @@ public:
     {
 
         auto q_bank = osg::Quat(std::sin(x / 2), 0, 0, std::cos(x / 2));
-        auto q_alt = osg::Quat(0, std::sin(y / 2), 0, std::cos(z / 2));
+        auto q_alt = osg::Quat(0, std::sin(y / 2), 0, std::cos(y / 2));
         auto q_heading = osg::Quat(0, 0, std::sin(z / 2), std::cos(z / 2));
 
         return (q_heading * q_alt) * q_bank;
