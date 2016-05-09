@@ -12,4 +12,4 @@ Requirements:
 
 	- git;
 
-	- [OpenSceneGraph (OSG)](https://github.com/openscenegraph/OpenSceneGraph);
+	- OpenSceneGraph (OSG): https://github.com/openscenegraph/OpenSceneGraph;
