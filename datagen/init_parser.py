@@ -11,9 +11,9 @@ class InitParser:
         self.config = configparser.ConfigParser()
         self.config.read(filename)
 
-    # MAIN-INFO
-    def mode(self):
-        return self.config['MAIN-INFO']['mode']
+    # IMAGES
+    def images_number(self):
+        return int(self.config['MAIN-INFO']['images_number'])
 
     # FOLDERS
     def backgrounds_folder(self):
@@ -22,11 +22,8 @@ class InitParser:
     def models_folder(self):
         return self.config['FOLDERS']['models_folder']
 
-    def trans_imgs_folder(self):
-        return self.config['FOLDERS']['trans_images_folder']
-
-    def overlaid_imgs_folder(self):
-        return self.config['FOLDERS']['overlaid_images_folder']
+    def imgs_folder(self):
+        return self.config['FOLDERS']['images_folder']
 
     def annotations_folder(self):
         return self.config['FOLDERS']['annotations_folder']
@@ -39,11 +36,8 @@ class InitParser:
         return self.config['FILES']['models'].split(', ')
 
     # MODEL-POSITION
-    def size_x(self):
-        return parse_tuple(self.config['MODEL-POSITION']['size_x'])
-
-    def size_y(self):
-        return parse_tuple(self.config['MODEL-POSITION']['size_y'])
+    def size(self):
+        return parse_tuple(self.config['MODEL-POSITION']['size'])
 
     def rotation_x(self):
         return parse_tuple(self.config['MODEL-POSITION']['rotation_x'])
@@ -64,4 +58,4 @@ class InitParser:
     # CLASSES
     def model_map(self):
         kvs = [kv.split(' : ') for kv in self.config['CLASSES']['model_map'].split(', ')]
-        return {kv[0]: kv[1] for kv in kvs}
+        return {self.models_folder() + kv[0]: kv[1] for kv in kvs}
