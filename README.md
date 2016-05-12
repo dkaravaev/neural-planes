@@ -4,6 +4,8 @@ Requirements:
 
 	- Python 3;
 
+	- Python-lxml, Python-Pillow;
+
 	- g++ >= 4.8 (C++11);
 
 	- cmake >= 3.4;
