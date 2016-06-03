@@ -1,0 +1,92 @@
+{
+    "global":
+    {
+        "folders":
+        {
+            "datasets" : "/home/dmitry/data/neural-planes/datasets/",
+            "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
+            "3dmodels" : "/home/dmitry/data/neural-planes/models/",
+            "weights" : "/home/dmitry/source/neural-planes/weights/",
+            "annotations" : 
+            {
+                "train" : "/home/dmitry/data/neural-planes/annotations/train/",
+                "validation" : "/home/dmitry/data/neural-planes/annotations/validation/",
+                "test" : "/home/dmitry/data/neural-planes/annotations/test/"
+            },
+            "images" : 
+            {
+                "train" : "/home/dmitry/data/neural-planes/images/train/",
+                "validation" : "/home/dmitry/data/neural-planes/images/validation/",
+                "test" : "/home/dmitry/data/neural-planes/images/test/"
+            }
+        },
+        "files":
+        {
+            "backgrounds" : ["clearsky.jpg"],
+            "3dmodels" : ["f14.obj", "v101.obj", "gull.obj"],
+            "datasets" : 
+            {
+                "train" : "neural-planes_train.hdf5",
+                "validation" : "neural-planes_validation.hdf5",
+                "test" : "neural-planes_test.hdf5"
+            }
+        },
+        "image" : 
+        {
+            "channels" : 3,
+            "size" : [224, 224]
+        },
+        "model" :
+        {
+            "side" : 7,
+            "boxes" : 2,
+            "classes" : ["fighter", "civil-plane", "bird"]
+        }
+    },
+    "gendata":
+    {
+        "number" :
+        {
+            "train" : 10000,
+            "validation" : 2000,
+            "test" : 2000
+        },
+        "3dmodel":
+        {
+            "size" : [60, 60],
+            "rotation":
+            {
+                "x" : [0, 360],
+                "y" : [0, 360],
+                "z" : [0, 360]
+            },
+            "classmap":
+            {
+                "f14.obj" : "fighter", 
+                "v101.obj" : "civil-plane",
+                "gull.obj" : "bird"
+            }
+        },
+        "effects":
+        {
+            "noise" : "Gaussian",
+            "blur" : 20
+        }
+    },
+    "net":
+    {
+        "training":
+        {
+            "batch" : 50,
+            "samples" : 10000,
+            "epochs" : 10
+        },
+        "SGD" :
+        {
+            "rate" : 0.0001,
+            "decay" : 0.0005, 
+            "momentum" : 0.9, 
+            "nesterov" : true
+        }
+    }
+}

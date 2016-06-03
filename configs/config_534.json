@@ -1,0 +1,71 @@
+{
+    "global":
+    {
+        "folders":
+        {
+            "images" : "/home/dmitry/data/neural-planes/images/",
+            "annotations" : "/home/dmitry/data/neural-planes/annotations/",
+            "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
+            "3dmodels" : "/home/dmitry/data/neural-planes/models/",
+            "weights" : "/home/dmitry/neural-planes/weights"
+        },
+        "files":
+        {
+            "backgrounds" : ["clearsky.jpg"],
+            "3dmodels" : ["f14.obj", "v101.obj", "gull.obj"],
+            "dataset" : "/home/dmitry/data/neural-planes/neural-planes.hdf5"
+        },
+        "image" : 
+        {
+            "channels" : 3,
+            "size" : [224, 224]
+        },
+        "model" :
+        {
+            "side" : 7,
+            "boxes" : 2,
+            "classes" : ["fighter", "civil-plane", "bird"]
+        }
+    },
+    "gendata":
+    {
+        "number" : 10000,
+        "3dmodel":
+        {
+            "size" : [60, 60],
+            "rotation":
+            {
+                "x" : [0, 360],
+                "y" : [0, 360],
+                "z" : [0, 360]
+            },
+            "classmap":
+            {
+                "f14.obj" : ["fighter"], 
+                "v101.obj" : ["civil-plane"],
+                "gull.obj" : ["bird"]
+            }
+        },
+        "effects":
+        {
+            "noise" : "Gaussian",
+            "blur" : 20
+        }
+    },
+    "net":
+    {
+        "training":
+        {
+            "batch" : 50,
+            "samples" : 10000,
+            "epochs" : 10
+        },
+        "SGD" :
+        {
+            "rate" : 0.0001,
+            "decay" : 0.0005, 
+            "momentum" : 0.9, 
+            "nesterov" : true
+        }
+    }
+}
