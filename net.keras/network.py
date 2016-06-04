@@ -6,16 +6,15 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, LeakyReLU, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
-
+from keras.callbacks import EarlyStopping
 from loader import DataLoader
 
 
-# TODO: MAKE VALIDATION GENERATOR!
-# TODO: MAKE TEST DATA!
-# TODO: MAKE LOSS FUNCTIONS!
+# TODO: CHECK CORRECTNESS OF DATA FLOW
+# TODO: MAKE LOSS FUNCTIONS!!!!
 # TODO: CONVERT PREDICTIONS!
 # TODO: WHY WITH RANDOM DATA ALL WORKS???
-
+# TODO: MAKE BETTER RANDOM IN LOADER!
 
 class Network:
     """
@@ -33,6 +32,7 @@ class Network:
         TOTAL = SIDE x SIDE x CLASSES + SIDE x SIDE x B + SIDE x SIDE x B x 4 = SIDE x SIDE x (B x 5 + CLASSES)
     """
     def __init__(self, filename):
+        print('Config file: ' + filename)
         self.config = json.load(open(filename, 'r'))
 
         self.classes = self.config['global']['model']['classes']
@@ -93,7 +93,7 @@ class Network:
         self.model.add(Dense(self.output))
 
         sgd = SGD(lr=self.lr, decay=self.decay, momentum=self.momentum, nesterov=self.nesterov)
-        self.model.compile(optimizer=sgd, loss='mse')
+        self.model.compile(optimizer=sgd, loss='mean_absolute_error', metrics=['accuracy'])
 
     def train(self):
         train_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
@@ -102,9 +102,24 @@ class Network:
         validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                                     self.config['global']['files']['datasets']['train']))
 
-        self.model.fit_generator(train_loader.flow(self.batch), validation_data=validation_loader.flow(self.batch),
-                                 samples_per_epoch=self.samples, nb_epoch=self.epochs, nb_val_samples=2000)
+        stopping = EarlyStopping(monitor='val_loss', patience=4)
 
+        h = self.model.fit_generator(train_loader.flow(self.batch), validation_data=validation_loader.flow(self.batch),
+                                     samples_per_epoch=self.samples, nb_epoch=self.epochs,
+                                     nb_val_samples=validation_loader.size(), callbacks=[stopping])
+
+        now = str(datetime.datetime.now())
         self.model.save_weights(os.path.join(self.config['global']['folders']['weights'],
-                                             'weights_' + str(datetime.datetime.now()) + '.h5'))
+                                             'weights_' + now + '.h5'))
+
+        with open(os.path.join(self.config['global']['files']['histories'], 'history' + now + '.json'), 'w') as f:
+            json.dump(obj=h.history, fp=f, indent=4)
+
+        return h.history
+
+    def test(self):
+        test_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
+                                              self.config['global']['files']['datasets']['test']))
+        self.model.evaluate_generator(generator=test_loader.flow(batch=self.batch), val_samples=test_loader.size())
+
 

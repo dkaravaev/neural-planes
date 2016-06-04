@@ -3,17 +3,34 @@
     {
         "folders":
         {
-            "images" : "/home/dmitry/data/neural-planes/images/",
-            "annotations" : "/home/dmitry/data/neural-planes/annotations/",
+            "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "weights" : "/home/dmitry/neural-planes/weights"
+            "weights" : "/home/dmitry/source/neural-planes/weights/",
+            "annotations" : 
+            {
+                "train" : "/home/dmitry/data/neural-planes/annotations/train/",
+                "validation" : "/home/dmitry/data/neural-planes/annotations/validation/",
+                "test" : "/home/dmitry/data/neural-planes/annotations/test/"
+            },
+            "images" : 
+            {
+                "train" : "/home/dmitry/data/neural-planes/images/train/",
+                "validation" : "/home/dmitry/data/neural-planes/images/validation/",
+                "test" : "/home/dmitry/data/neural-planes/images/test/"
+            }
         },
         "files":
         {
             "backgrounds" : ["clearsky.jpg"],
-            "3dmodels" : ["f14.obj", "v101.obj", "gull.obj"],
-            "dataset" : "/home/dmitry/data/neural-planes/neural-planes.hdf5"
+            "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ"],
+            "datasets" : 
+            {
+                "train" : "neural-planes_train.hdf5",
+                "validation" : "neural-planes_validation.hdf5",
+                "test" : "neural-planes_test.hdf5"
+            },
+            "histories" : "/home/dmitry/source/neural-planes/histories"
         },
         "image" : 
         {
@@ -29,7 +46,12 @@
     },
     "gendata":
     {
-        "number" : 10000,
+        "number" :
+        {
+            "train" : 10000,
+            "validation" : 2000,
+            "test" : 2000
+        },
         "3dmodel":
         {
             "size" : [60, 60],
@@ -41,9 +63,9 @@
             },
             "classmap":
             {
-                "f14.obj" : ["fighter"], 
-                "v101.obj" : ["civil-plane"],
-                "gull.obj" : ["bird"]
+                "f14/F-14A_Tomcat.obj" : "fighter", 
+                "v101/Emirates_V101LR.obj" : "civil-plane",
+                "gull/GULL.OBJ" : "bird"
             }
         },
         "effects":
