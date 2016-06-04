@@ -93,7 +93,7 @@ class Network:
         self.model.add(Dense(self.output))
 
         sgd = SGD(lr=self.lr, decay=self.decay, momentum=self.momentum, nesterov=self.nesterov)
-        self.model.compile(optimizer=sgd, loss='mean_absolute_error', metrics=['accuracy'])
+        self.model.compile(optimizer=sgd, loss='mse', metrics=['accuracy'])
 
     def train(self):
         train_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],

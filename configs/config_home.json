@@ -29,7 +29,8 @@
                 "train" : "neural-planes_train.hdf5",
                 "validation" : "neural-planes_validation.hdf5",
                 "test" : "neural-planes_test.hdf5"
-            }
+            },
+            "histories" : "/home/dmitry/source/neural-planes/histories"
         },
         "image" : 
         {

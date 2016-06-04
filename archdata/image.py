@@ -35,22 +35,22 @@ class GridImage:
         classes_num = len(self.classes)
         truth = numpy.zeros(self.side * self.side * (self.b * 5 + classes_num), dtype='float32')
         for i in range(self.side * self.side):
+            row = i // self.side
             col = i % self.side
-            row = i / self.side
 
-            boxes = self.grid.get(col, row)
+            boxes = self.grid.get(row, col)
+            if not(boxes is None):
+                class_index = i * classes_num
+                truth[class_index + boxes[0].class_num] = 1
 
-            class_index = i * classes_num
-            truth[class_index + boxes[0].class_num] = 1
+                confidence_index = self.side * self.side * classes_num + i * self.b
+                truth[confidence_index] = 1
 
-            confidence_index = self.side * self.side * classes_num + i * self.b
-            truth[confidence_index] = 1
-
-            box_index = self.side * self.side * (classes_num + self.b) + i * self.b * 4
-            x, y, w, h = boxes[0].normalize(self.side, self.w, self.h)
-            truth[box_index + 0] = x
-            truth[box_index + 1] = y
-            truth[box_index + 2] = numpy.sqrt(w)
-            truth[box_index + 3] = numpy.sqrt(h)
+                box_index = self.side * self.side * (classes_num + self.b) + i * self.b * 4
+                x, y, w, h = boxes[0].normalize(self.side, self.w, self.h)
+                truth[box_index + 0] = x
+                truth[box_index + 1] = y
+                truth[box_index + 2] = numpy.sqrt(w)
+                truth[box_index + 3] = numpy.sqrt(h)
 
         return truth

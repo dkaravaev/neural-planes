@@ -7,15 +7,15 @@ class Box:
         self.class_num = class_num
 
     def normalize(self, side, w, h):
-        return (self.x % side) / w, \
-               (self.y % side) / h,  \
-               self.w / w,  \
-               self.h / h
+        cell_size = int(w / side)
+        return (self.x % cell_size) / cell_size, \
+               (self.y % cell_size) / cell_size,  \
+               self.w / w, self.h / h
 
 
 class Cell:
     def __init__(self):
-        self.boxes = []
+        self.boxes = list()
         self.has_obj = False
 
     def add_box(self, box):
@@ -29,14 +29,25 @@ class Grid:
         self.w = w
         self.h = h
         self.cell_size = w / side
-        self.cells = [[Cell()] * side] * side
+
+        self.cells = list()
+        for i in range(side):
+            self.cells.append(list())
+            for j in range(side):
+                self.cells[i].append(Cell())
+
+        self.size = 0
 
     def insert(self, box):
-        col = box.x // self.cell_size
         row = box.y // self.cell_size
+        col = box.x // self.cell_size
 
+        self.size += 1
         self.cells[int(row)][int(col)].add_box(box)
 
-    def get(self, col, row):
-        return self.cells[int(row)][int(col)].boxes
+    def get(self, row, col):
+        cell = self.cells[row][col]
+        if cell.has_obj:
+            return cell.boxes
+        return None
 

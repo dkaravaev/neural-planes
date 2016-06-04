@@ -51,10 +51,10 @@ class DataArchiver:
 
         output_size = self.side * self.side * (self.b * 5 + len(self.classes))
 
-        x_train = file.create_dataset('x_train', (len(images), self.channels, self.w, self.h),
-                                      dtype='float32', chunks=True)
-        y_train = file.create_dataset('y_train', (len(images), output_size), 
-                                      dtype='float32', chunks=True)
+        x = file.create_dataset('x', (len(images), self.channels, self.w, self.h),
+                                dtype='float32', chunks=True)
+        y = file.create_dataset('y', (len(images), output_size),
+                                dtype='float32', chunks=True)
 
         i = 0
         number = len(images)
@@ -66,8 +66,8 @@ class DataArchiver:
             xml_file = os.path.join(ann_folder, img.replace('png', 'xml'))
             image = GridImage(img_file, xml_file, self.side, self.w, self.h, self.b, self.classes)
 
-            x_train[i] = image.array
-            y_train[i] = image.ground_truth()
+            x[i] = image.array
+            y[i] = image.ground_truth()
             i += 1
 
         print('\tSaved to: ' + result_filename)
