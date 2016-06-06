@@ -6,7 +6,7 @@
             "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "weights" : "/home/dmitry/source/neural-planes/weights/",
+            "dumps" : "/home/dmitry/source/neural-planes/dumps/",
             "annotations" : 
             {
                 "train" : "/home/dmitry/data/neural-planes/annotations/train/",
@@ -29,8 +29,7 @@
                 "train" : "neural-planes_train.hdf5",
                 "validation" : "neural-planes_validation.hdf5",
                 "test" : "neural-planes_test.hdf5"
-            },
-            "histories" : "/home/dmitry/source/neural-planes/histories"
+            }
         },
         "image" : 
         {
@@ -40,7 +39,7 @@
         "model" :
         {
             "side" : 7,
-            "boxes" : 2,
+            "boxes" : 1,
             "classes" : ["fighter", "civil-plane", "bird"]
         }
     },
@@ -48,9 +47,9 @@
     {
         "number" :
         {
-            "train" : 10000,
-            "validation" : 2000,
-            "test" : 2000
+            "train" : 50000,
+            "validation" : 5000,
+            "test" : 5000
         },
         "3dmodel":
         {
@@ -79,8 +78,8 @@
         "training":
         {
             "batch" : 50,
-            "samples" : 10000,
-            "epochs" : 10
+            "samples" : 50000,
+            "epochs" : 40
         },
         "SGD" :
         {

@@ -1,6 +1,9 @@
 import json
 import datetime
 import os
+import numpy
+
+from PIL import Image
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LeakyReLU, Flatten
@@ -10,13 +13,14 @@ from keras.callbacks import EarlyStopping
 
 from objectives import SingleDetectionLoss
 from loader import DataLoader
-
+from converter import DetectionHandler
 
 # TODO: CHECK CORRECTNESS OF DATA FLOW
 # TODO: MAKE LOSS FUNCTIONS!!!!
 # TODO: CONVERT PREDICTIONS!
 # TODO: WHY WITH RANDOM DATA ALL WORKS???
 # TODO: MAKE BETTER RANDOM IN LOADER!
+
 
 class Network:
     """
@@ -110,18 +114,44 @@ class Network:
                                      samples_per_epoch=self.samples, nb_epoch=self.epochs,
                                      nb_val_samples=validation_loader.size, callbacks=[stopping])
 
-        now = str(datetime.datetime.now())
-        self.model.save_weights(os.path.join(self.config['global']['folders']['weights'],
-                                             'weights_' + now + '.h5'))
-
-        with open(os.path.join(self.config['global']['files']['histories'], 'history' + now + '.json'), 'w') as f:
-            json.dump(obj=h.history, fp=f, indent=4)
-
-        return h.history
+        self.dump(h.history)
 
     def test(self):
         test_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                               self.config['global']['files']['datasets']['test']))
         self.model.evaluate_generator(generator=test_loader.flow(batch=self.batch), val_samples=test_loader.size)
+
+    def dump(self, history):
+        now = str(datetime.datetime.now()).replace(' ', '_')
+
+        dump_folder = os.path.join(self.config['global']['folders']['dumps'], 'dump_' + now)
+        os.makedirs(dump_folder)
+
+        self.model.save_weights(os.path.join(dump_folder, 'weights_' + now + '.h5'))
+        json_model = self.model.to_json()
+
+        with open(os.path.join(dump_folder, 'model_' + now + '.json'), 'w') as f:
+            f.write(json_model)
+
+        with open(os.path.join(dump_folder, 'history_' + now + '.json'), 'w') as f:
+            json.dump(obj=history, fp=f, indent=4)
+
+        with open(os.path.join(dump_folder, 'config_' + now + '.json'), 'w') as f:
+            json.dump(obj=self.config, fp=f, indent=4)
+
+    def predict(self, image_path):
+        image = Image.open(image_path)
+        inp = numpy.asarray(image) / 255
+        inp = numpy.asarray([inp[:, :, 0], inp[:, :, 1], inp[:, :, 2]])
+
+        output = self.model.predict(numpy.asarray([inp]), batch_size=1)
+        dhandler = DetectionHandler()
+
+        dhandler.overlay_results(image, output[0], threshold=0.1)
+
+
+
+
+
 
 

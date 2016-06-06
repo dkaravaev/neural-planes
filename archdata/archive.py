@@ -47,17 +47,16 @@ class DataArchiver:
 
     def archive_from_folders(self, img_folder, ann_folder, result_filename, batch):
         images = os.listdir(img_folder)
-        file = h5py.File(result_filename, 'w')
+        number = len(images)
+
+        file = h5py.File(result_filename, 'w', libver='latest')
 
         output_size = self.side * self.side * (self.b * 5 + len(self.classes))
 
-        x = file.create_dataset('x', (len(images), self.channels, self.w, self.h),
-                                dtype='float32', chunks=True)
-        y = file.create_dataset('y', (len(images), output_size),
-                                dtype='float32', chunks=True)
+        x = file.create_dataset('x', (number, self.channels, self.w, self.h), dtype='float32')
+        y = file.create_dataset('y', (number, output_size), dtype='float32')
 
         i = 0
-        number = len(images)
         for img in images:
             if (i + 1) % batch == 0:
                 print('\tArchived: ' + str(i + 1) + '/' + str(number))

@@ -6,7 +6,7 @@
             "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "weights" : "/home/dmitry/source/neural-planes/weights/",
+            "dumps" : "/home/dmitry/source/neural-planes/dumps/",
             "annotations" : 
             {
                 "train" : "/home/dmitry/data/neural-planes/annotations/train/",
@@ -29,8 +29,7 @@
                 "train" : "neural-planes_train_single.hdf5",
                 "validation" : "neural-planes_validation_single.hdf5",
                 "test" : "neural-planes_test_single.hdf5"
-            },
-            "histories" : "/home/dmitry/source/neural-planes/histories"
+            }
         },
         "image" : 
         {
