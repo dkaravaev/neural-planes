@@ -10,26 +10,52 @@ classes = ["fighter", "civil-plane", "bird"]
 class SingleDetectionLoss:
     PENALTY_OBJ = 4
 
+    """
     @staticmethod
     def function(y_true, y_pred):
-        shape = (50, 7, 7, 8)
+        shape = (7, 7, 8)
 
         loss = 0.0
 
         y_true = y_true.reshape(shape)
         y_pred = y_pred.reshape(shape)
 
-        for row in range(7):
-            for col in range(7):
-                obj = SingleDetectionLoss.PENALTY_OBJ * y_true[:, :, :, 4]
+        #for row in range(7):
+        #    for col in range(7):
+        obj = SingleDetectionLoss.PENALTY_OBJ * y_true[:, :, 4]
 
-                loss += obj * (tensor.sum(tensor.square(y_pred[:, row, col, 0:4] - y_true[:, row, col, 0:4])) +
-                               tensor.sum(tensor.square(y_pred[:, row, col, 5:8] - y_true[:, row, col, 5:8])))
+        loss += obj * (tensor.sum(tensor.square(y_pred[:, :, 0:4] - y_true[:, :, 0:4])) +
+                               tensor.sum(tensor.square(y_pred[:, :, 5:8] - y_true[:, :, 5:8])))
 
-                loss += tensor.sum(tensor.square(y_pred[:, row, col, 4] - y_true[:, row, col, 4]))
+        loss += tensor.sum(tensor.square(y_pred[:, :, 4] - y_true[:, :, 4]))
 
-        # loss = tensor.sum(loss)
+        loss = tensor.sum(loss)
 
+        return loss
+    """
+
+    @staticmethod
+    def function(y_true, y_pred):
+        y1 = y_pred
+        y2 = y_true
+        loss = 0.0
+
+        scale_vector = [2] * 4
+        scale_vector.extend([1] * 3)
+        scale_vector = numpy.reshape(numpy.asarray(scale_vector), (1, len(scale_vector)))
+
+        for i in range(49):
+            y1_piece = y1[:, i * 8:i * 8 + 7]
+            y2_piece = y2[:, i * 8:i * 8 + 7]
+
+            y1_piece = y1_piece * scale_vector
+            y2_piece = y2_piece * scale_vector
+
+            loss_piece = tensor.sum(tensor.square(y1_piece - y2_piece), axis=1)
+            loss += loss_piece * y2[:, i * 8 + 7]
+            loss += tensor.square(y2[:, i * 8 + 7] - y1[:, i * 8 + 7])
+
+        loss = tensor.sum(loss)
         return loss
 
 

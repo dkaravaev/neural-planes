@@ -74,11 +74,11 @@ class GridImage:
                         truth[row, col, offset + 1] = y
                         truth[row, col, offset + 2] = numpy.sqrt(w)
                         truth[row, col, offset + 3] = numpy.sqrt(h)
-                        truth[row, col, offset + 4] = 1
 
-                        offset += 5
+                        offset += 4
 
                     # All boxes have one class num
-                    truth[row, col, self.b * 5 + boxes[0].class_num] = 1
+                    truth[row, col, self.b * 4 + boxes[0].class_num] = 1
+                    truth[row, col, self.b * 4 + classes_num] = 1
 
         return truth.reshape(shape[0] * shape[1] * shape[2])

@@ -92,8 +92,8 @@ class Network:
         self.model.add(Flatten())
 
         self.model.add(Dense(256))
-        self.model.add(Dense(1024))
-        self.model.add(LeakyReLU(alpha=0.1))
+        self.model.add(Dense(1024, activation='tanh'))
+        # self.model.add(LeakyReLU(alpha=0.1))
         self.model.add(Dropout(.5))
 
         self.model.add(Dense(self.output))
@@ -141,15 +141,17 @@ class Network:
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
 
-    def predict(self, image_path, weights=None):
-        if not(weights is None):
-            self.model.load_weights(weights)
+    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-06_18:32:30.086197/'
+                                          'weights_2016-06-06_18:32:30.086197.h5'):
+        # if not(weights is None):
+        # self.model.load_weights(weights)
 
         image = Image.open(image_path)
         inp = numpy.asarray(image) / 255
         inp = numpy.asarray([inp[:, :, 0], inp[:, :, 1], inp[:, :, 2]])
 
         output = self.model.predict(numpy.asarray([inp]), batch_size=1)
+        print(numpy.ndarray.tolist(output))
         dhandler = DetectionHandler()
 
         dhandler.overlay_results(image, output[0], threshold=0.0)

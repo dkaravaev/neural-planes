@@ -42,12 +42,13 @@ class DetectionHandler:
                     box.prob = prob
                     box.x = self.cell_size * (output[row, col, 0] + col)
                     box.y = self.cell_size * (output[row, col, 1] + row)
-                    box.w = self.w * (math.pow(output[row, col, 2], 2))
-                    box.h = self.h * (math.pow(output[row, col, 3], 2))
+                    box.w = 224 * (math.pow(output[row, col, 2], 2))
+                    box.h = 224 * (math.pow(output[row, col, 3], 2))
+
+                    print(224 * output[row, col, 2], 224 * output[row, col, 2])
 
                     box.class_num = numpy.argmax(probs)
                     boxes.append(box)
-                    print(box)
 
         return boxes
 
