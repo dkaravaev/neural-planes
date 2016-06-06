@@ -139,6 +139,8 @@ class Network:
         with open(os.path.join(dump_folder, 'config_' + now + '.json'), 'w') as f:
             json.dump(obj=self.config, fp=f, indent=4)
 
+        os.system('yandex-disk sync --dir=~/Yandex.Disk')
+
     def predict(self, image_path):
         image = Image.open(image_path)
         inp = numpy.asarray(image) / 255

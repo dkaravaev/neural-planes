@@ -6,7 +6,7 @@
             "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "dumps" : "/home/dmitry/source/neural-planes/dumps/",
+            "dumps" : "/home/dmitry/Yandex.Disk/Dimploma/dumps/",
             "annotations" : 
             {
                 "train" : "/home/dmitry/data/neural-planes/annotations/train/",
@@ -79,7 +79,7 @@
         {
             "batch" : 50,
             "samples" : 50000,
-            "epochs" : 40
+            "epochs" : 20
         },
         "SGD" :
         {
