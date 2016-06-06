@@ -141,7 +141,10 @@ class Network:
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
 
-    def predict(self, image_path):
+    def predict(self, image_path, weights=None):
+        if not(weights is None):
+            self.model.load_weights(weights)
+
         image = Image.open(image_path)
         inp = numpy.asarray(image) / 255
         inp = numpy.asarray([inp[:, :, 0], inp[:, :, 1], inp[:, :, 2]])
@@ -149,7 +152,7 @@ class Network:
         output = self.model.predict(numpy.asarray([inp]), batch_size=1)
         dhandler = DetectionHandler()
 
-        dhandler.overlay_results(image, output[0], threshold=0.1)
+        dhandler.overlay_results(image, output[0], threshold=0.0)
 
 
 

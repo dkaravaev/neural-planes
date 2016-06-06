@@ -1,7 +1,6 @@
 import numpy
 import math
 
-from PIL import Image
 from PIL import ImageDraw
 
 
@@ -12,6 +11,10 @@ class Box:
         self.h = 0
         self.w = 0
         self.class_num = -1
+        self.prob = 0
+
+    def __str__(self):
+        return '%f %f %f %f %d %f' % (self.x, self.y, self.h, self.w, self.class_num, self.prob)
 
 
 class DetectionHandler:
@@ -35,8 +38,8 @@ class DetectionHandler:
                 prob = numpy.max(probs)
 
                 if prob >= threshold:
-                    box = Box(len(self.classes))
-
+                    box = Box()
+                    box.prob = prob
                     box.x = self.cell_size * (output[row, col, 0] + col)
                     box.y = self.cell_size * (output[row, col, 1] + row)
                     box.w = self.w * (math.pow(output[row, col, 2], 2))
@@ -44,6 +47,7 @@ class DetectionHandler:
 
                     box.class_num = numpy.argmax(probs)
                     boxes.append(box)
+                    print(box)
 
         return boxes
 
@@ -55,11 +59,10 @@ class DetectionHandler:
         colors = ['red', 'green', 'blue']
 
         for box in boxes:
-            color = colors.index(box.class_num)
             xmin = box.x - box.w / 2
             xmax = box.x + box.w / 2
             ymin = box.y - box.h / 2
             ymax = box.y + box.h / 2
-            draw.rectangle(((xmin, xmax), (ymin, ymax)), outline=color)
+            draw.rectangle(((xmin, xmax), (ymin, ymax)), outline=colors[box.class_num])
 
         image.save('result.png')

@@ -6,7 +6,7 @@
             "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "dumps" : "/home/dmitry/Yandex.Disk/Dimploma/dumps/",
+            "dumps" : "/home/dmitry/Yandex.Disk/Diploma/dumps/",
             "annotations" : 
             {
                 "train" : "/home/dmitry/data/neural-planes/annotations/train/",
