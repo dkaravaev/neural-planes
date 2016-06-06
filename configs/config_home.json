@@ -26,9 +26,9 @@
             "3dmodels" : ["f14.obj", "v101.obj", "gull.obj"],
             "datasets" : 
             {
-                "train" : "neural-planes_train.hdf5",
-                "validation" : "neural-planes_validation.hdf5",
-                "test" : "neural-planes_test.hdf5"
+                "train" : "neural-planes_train_single.hdf5",
+                "validation" : "neural-planes_validation_single.hdf5",
+                "test" : "neural-planes_test_single.hdf5"
             },
             "histories" : "/home/dmitry/source/neural-planes/histories"
         },
@@ -40,7 +40,7 @@
         "model" :
         {
             "side" : 7,
-            "boxes" : 2,
+            "boxes" : 1,
             "classes" : ["fighter", "civil-plane", "bird"]
         }
     },
@@ -80,7 +80,7 @@
         {
             "batch" : 50,
             "samples" : 10000,
-            "epochs" : 10
+            "epochs" : 100
         },
         "SGD" :
         {

@@ -31,7 +31,7 @@ class GridImage:
 
             self.grid.insert(box=grid.Box(xmin, ymin, xmax, ymax, class_num))
 
-    def ground_truth(self):
+    def truth_original(self):
         classes_num = len(self.classes)
         truth = numpy.zeros(self.side * self.side * (self.b * 5 + classes_num), dtype='float32')
         for i in range(self.side * self.side):
@@ -54,3 +54,31 @@ class GridImage:
                 truth[box_index + 3] = numpy.sqrt(h)
 
         return truth
+
+    def truth_tensor(self):
+        classes_num = len(self.classes)
+
+        pred_dim = self.b * 5 + classes_num
+        shape = (self.side, self.side, pred_dim)
+
+        truth = numpy.zeros(shape, dtype='float32')
+
+        for row in range(self.side):
+            for col in range(self.side):
+                boxes = self.grid.get(row, col)
+                if not (boxes is None):
+                    offset = 0
+                    for box in boxes:
+                        x, y, w, h = box.normalize(self.side, self.w, self.h)
+                        truth[row, col, offset + 0] = x
+                        truth[row, col, offset + 1] = y
+                        truth[row, col, offset + 2] = numpy.sqrt(w)
+                        truth[row, col, offset + 3] = numpy.sqrt(h)
+                        truth[row, col, offset + 4] = 1
+
+                        offset += 5
+
+                    # All boxes have one class num
+                    truth[row, col, self.b * 5 + boxes[0].class_num] = 1
+
+        return truth.reshape(shape[0] * shape[1] * shape[2])

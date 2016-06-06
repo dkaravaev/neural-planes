@@ -7,6 +7,8 @@ from keras.layers import Dense, Dropout, LeakyReLU, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.callbacks import EarlyStopping
+
+from objectives import SingleDetectionLoss
 from loader import DataLoader
 
 
@@ -93,7 +95,7 @@ class Network:
         self.model.add(Dense(self.output))
 
         sgd = SGD(lr=self.lr, decay=self.decay, momentum=self.momentum, nesterov=self.nesterov)
-        self.model.compile(optimizer=sgd, loss='mse', metrics=['accuracy'])
+        self.model.compile(optimizer=sgd, loss=SingleDetectionLoss.function, metrics=['accuracy'])
 
     def train(self):
         train_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
@@ -102,11 +104,11 @@ class Network:
         validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                                     self.config['global']['files']['datasets']['train']))
 
-        stopping = EarlyStopping(monitor='val_loss', patience=4)
+        stopping = EarlyStopping(monitor='val_loss', patience=10)
 
         h = self.model.fit_generator(train_loader.flow(self.batch), validation_data=validation_loader.flow(self.batch),
                                      samples_per_epoch=self.samples, nb_epoch=self.epochs,
-                                     nb_val_samples=validation_loader.size(), callbacks=[stopping])
+                                     nb_val_samples=validation_loader.size, callbacks=[stopping])
 
         now = str(datetime.datetime.now())
         self.model.save_weights(os.path.join(self.config['global']['folders']['weights'],
@@ -120,6 +122,6 @@ class Network:
     def test(self):
         test_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                               self.config['global']['files']['datasets']['test']))
-        self.model.evaluate_generator(generator=test_loader.flow(batch=self.batch), val_samples=test_loader.size())
+        self.model.evaluate_generator(generator=test_loader.flow(batch=self.batch), val_samples=test_loader.size)
 
 

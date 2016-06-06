@@ -67,7 +67,7 @@ class DataArchiver:
             image = GridImage(img_file, xml_file, self.side, self.w, self.h, self.b, self.classes)
 
             x[i] = image.array
-            y[i] = image.ground_truth()
+            y[i] = image.truth_tensor()
             i += 1
 
         print('\tSaved to: ' + result_filename)
