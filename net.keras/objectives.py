@@ -10,30 +10,6 @@ classes = ["fighter", "civil-plane", "bird"]
 class SingleDetectionLoss:
     PENALTY_OBJ = 4
 
-    """
-    @staticmethod
-    def function(y_true, y_pred):
-        shape = (7, 7, 8)
-
-        loss = 0.0
-
-        y_true = y_true.reshape(shape)
-        y_pred = y_pred.reshape(shape)
-
-        #for row in range(7):
-        #    for col in range(7):
-        obj = SingleDetectionLoss.PENALTY_OBJ * y_true[:, :, 4]
-
-        loss += obj * (tensor.sum(tensor.square(y_pred[:, :, 0:4] - y_true[:, :, 0:4])) +
-                               tensor.sum(tensor.square(y_pred[:, :, 5:8] - y_true[:, :, 5:8])))
-
-        loss += tensor.sum(tensor.square(y_pred[:, :, 4] - y_true[:, :, 4]))
-
-        loss = tensor.sum(loss)
-
-        return loss
-    """
-
     @staticmethod
     def function(y_true, y_pred):
         loss = 0.0
@@ -43,16 +19,20 @@ class SingleDetectionLoss:
         scale_vector = numpy.asarray(scale_vector)
 
         for i in range(49):
-            obj_true = y_true[:, i * 8:i * 8 + 7]
-            obj_pred = y_pred[:, i * 8:i * 8 + 7]
+            box_true = y_true[:, i * 8:i * 8 + 4]
+            box_pred = y_pred[:, i * 8:i * 8 + 4]
 
-            has_obj = y_true[:, i * 8 + 7]
-            pred_conf = y_pred[:, i * 8 + 7]
+            has_obj = y_true[:, i * 8 + 4]
+            pred_conf = y_pred[:, i * 8 + 4]
 
-            obj_loss = tensor.sum(tensor.mul(scale_vector, tensor.square(obj_true - obj_pred)), axis=1)
+            probs_true = y_true[:, i * 8 + 4:i * 8 + 7]
+            probs_pred = y_pred[:, i * 8 + 4:i * 8 + 7]
 
-            loss += tensor.mul(has_obj, obj_loss)
+            box_loss = tensor.sum(tensor.mul(scale_vector, tensor.square(box_true - box_pred)), axis=1)
+
+            loss += tensor.mul(has_obj, box_loss)
             loss += tensor.square(has_obj - pred_conf)
+            loss += tensor.square(probs_true - probs_pred)
 
         loss = tensor.sum(loss)
         return loss

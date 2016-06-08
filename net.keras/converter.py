@@ -34,7 +34,7 @@ class DetectionHandler:
         boxes = []
         for row in range(self.side):
             for col in range(self.side):
-                probs = output[row, col, 4] * output[row, col, 5:8]
+                probs = output[row, col, 7] * output[row, col, 4:7]
                 prob = numpy.max(probs)
 
                 if prob >= threshold:
@@ -42,12 +42,14 @@ class DetectionHandler:
                     box.prob = prob
                     box.x = self.cell_size * (output[row, col, 0] + col)
                     box.y = self.cell_size * (output[row, col, 1] + row)
+
                     box.w = 224 * (math.pow(output[row, col, 2], 2))
                     box.h = 224 * (math.pow(output[row, col, 3], 2))
 
-                    print(224 * output[row, col, 2], 224 * output[row, col, 2])
-
                     box.class_num = numpy.argmax(probs)
+
+                    print(box)
+
                     boxes.append(box)
 
         return boxes
