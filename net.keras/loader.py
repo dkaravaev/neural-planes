@@ -29,9 +29,8 @@ class DataLoader:
     def read_from_indexes(self, indexes):
         x = [self.file['x'][i] for i in indexes]
         y = [self.file['y'][i] for i in indexes]
-        numpy.random.shuffle(x)
-        numpy.random.shuffle(y)
-        return x, y
+
+        return numpy.asarray(x), numpy.asarray(y)
 
     def read_chunk(self, batch):
         x = self.file['x'][self.offset:self.offset + batch]
