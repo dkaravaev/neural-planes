@@ -48,8 +48,6 @@ class DetectionHandler:
 
                     box.class_num = numpy.argmax(probs)
 
-                    print(box)
-
                     boxes.append(box)
 
         return boxes
@@ -66,6 +64,6 @@ class DetectionHandler:
             xmax = box.x + box.w / 2
             ymin = box.y - box.h / 2
             ymax = box.y + box.h / 2
-            draw.rectangle(((xmin, xmax), (ymin, ymax)), outline=colors[box.class_num])
+            draw.rectangle(((xmin, ymin), (xmax, ymax)), outline=colors[box.class_num])
 
         image.save('result.png')

@@ -26,10 +26,11 @@ class SingleDetectionLoss:
             probs_pred = y_pred[:, i * 8 + 4:i * 8 + 7]
 
             box_loss = tensor.sum(tensor.mul(scale_vector, tensor.square(box_true - box_pred)), axis=1)
+            prob_loss = tensor.sum(tensor.square(probs_true - probs_pred), axis=1)
 
             loss += tensor.mul(has_obj, box_loss)
+            loss += tensor.mul(has_obj, prob_loss)
             loss += tensor.square(has_obj - pred_conf)
-            loss += tensor.sum(tensor.square(probs_true - probs_pred), axis=1)
 
         loss = tensor.sum(loss)
         return loss
@@ -119,40 +120,31 @@ class MultiDetectionLoss:
         mse_a_gt = MultiDetectionLoss.box_mse(a_offset, gt_offset)
         mse_b_gt = MultiDetectionLoss.box_mse(b_offset, gt_offset)
 
-        # mask is either 0 or 1, 1 indicates box b has a higher iou with gt than box a
         mask = tensor.switch(tensor.lt(iou_a_gt, iou_b_gt), 1, 0)
 
-        # if two boxes both have 0 iou with ground truth, we blame the one with higher mse with gt
-        # It feels like hell to code like this,f**k!
         mask_iou_zero = tensor.switch(tensor.and_(tensor.le(iou_a_gt, 0), tensor.le(iou_b_gt, 0)), 1, 0)
         mask_mse = tensor.switch(tensor.lt(mse_a_gt, mse_b_gt), 1, 0)
         mask_change = mask_iou_zero * mask_mse
         mask = mask + mask_change
         mask = gradient.disconnected_grad(mask)
 
-        # loss between boxes and gt
         loss_a_gt = tensor.sum(tensor.square(a - gt), axis=2) * 5
         loss_b_gt = tensor.sum(tensor.square(b - gt), axis=2) * 5
 
-        # use mask to add the loss from the box with higher iou with gt
         loss += y_true[:, :, 4] * (1 - mask) * loss_a_gt
         loss += y_true[:, :, 4] * mask * loss_b_gt
 
-        # confident loss between boxes and gt
         closs_a_gt = tensor.square(iou_a_gt * y_true[:, :, 4] - y_pred[:, :, 4])
         closs_b_gt = tensor.square(iou_b_gt * y_true[:, :, 4] - y_pred[:, :, 9])
 
         loss += closs_a_gt * (1 - mask) * y_true[:, :, 4]
         loss += closs_b_gt * mask * y_true[:, :, 4]
 
-        # if the cell has no obj, confidence loss should be halved
         loss += closs_a_gt * (1 - y_true[:, :, 4]) * 0.5
         loss += closs_b_gt * (1 - y_true[:, :, 4]) * 0.5
 
-        # add loss for the conditioned classification error
         loss += tensor.sum(tensor.square(y_pred[:, :, 10:13] - y_true[:, :, 10:13]), axis=2) * y_true[:, :, 4]
 
-        # sum for each cell
         loss = tensor.sum(loss)
 
         return loss

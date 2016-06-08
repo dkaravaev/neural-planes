@@ -92,11 +92,13 @@ class Network:
         self.model.add(Flatten())
 
         self.model.add(Dense(256))
+        self.model.add(LeakyReLU(alpha=0.1))
         self.model.add(Dense(1024))
         self.model.add(LeakyReLU(alpha=0.1))
-        self.model.add(Dropout(.5))
 
-        self.model.add(Dense(self.output))
+        # self.model.add(Dropout(.5))
+
+        self.model.add(Dense(self.output, activation='sigmoid'))
 
         sgd = SGD(lr=self.lr, decay=self.decay, momentum=self.momentum, nesterov=self.nesterov)
         self.model.compile(optimizer=sgd, loss=SingleDetectionLoss.function, metrics=['accuracy'])
@@ -140,8 +142,8 @@ class Network:
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
 
-    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-08_11:32:33.014778/'
-                                          'weights_2016-06-08_11:32:33.014778.h5', threshold=0.0):
+    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-08_19:49:47.151305/'
+                                          'weights_2016-06-08_19:49:47.151305.h5', threshold=0.0):
         # if not(weights is None):
         self.model.load_weights(weights)
 
