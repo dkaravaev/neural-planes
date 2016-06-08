@@ -142,8 +142,8 @@ class Network:
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
 
-    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-08_19:49:47.151305/'
-                                          'weights_2016-06-08_19:49:47.151305.h5', threshold=0.0):
+    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-09_00:19:24.023477/'
+                                          'weights_2016-06-09_00:19:24.023477.h5', threshold=0.0):
         # if not(weights is None):
         self.model.load_weights(weights)
 
@@ -155,6 +155,9 @@ class Network:
         dhandler = DetectionHandler()
 
         dhandler.overlay_results(image, output[0], threshold=threshold)
+
+    def from_darknet_weights(self):
+        return self.shape
 
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/network.py" line="163" />
+    <bookmark url="file://$PROJECT_DIR$/network.py" line="166" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="434f6436-3369-49fe-bae8-63bf134ee269" name="Default" comment="" />
@@ -31,8 +31,8 @@
       <file leaf-file-name="network.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="635">
-              <caret line="94" column="44" selection-start-line="94" selection-start-column="44" selection-end-line="94" selection-end-column="44" />
+            <state relative-caret-position="401">
+              <caret line="145" column="77" selection-start-line="145" selection-start-column="77" selection-end-line="145" selection-end-column="77" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -43,10 +43,22 @@
       <file leaf-file-name="objectives.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/objectives.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
+            <state relative-caret-position="180">
+              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="loader.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/loader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="666">
+              <caret line="37" column="59" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,11 +79,11 @@
         <option value="$PROJECT_DIR$/data_generator.py" />
         <option value="$PROJECT_DIR$/data_loader.py" />
         <option value="$PROJECT_DIR$/geometry.py" />
-        <option value="$PROJECT_DIR$/loader.py" />
         <option value="$PROJECT_DIR$/objectives/lambda_mse.py" />
         <option value="$PROJECT_DIR$/../configs/config_home.json" />
         <option value="$PROJECT_DIR$/converter.py" />
         <option value="$PROJECT_DIR$/objectives.py" />
+        <option value="$PROJECT_DIR$/loader.py" />
         <option value="$PROJECT_DIR$/network.py" />
       </list>
     </option>
@@ -375,7 +387,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1055" extended-state="1" />
+    <frame x="0" y="0" width="1920" height="1055" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -454,7 +466,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#12#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -750,13 +762,6 @@
     </entry>
     <entry file="file:///usr/local/lib/python3.4/dist-packages/pydrive/drive.py" />
     <entry file="file:///usr/local/lib/python3.4/dist-packages/pydrive/auth.py" />
-    <entry file="file://$PROJECT_DIR$/loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.4/dist-packages/theano/tensor/basic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="301">
@@ -786,30 +791,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/converter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="48" column="55" selection-start-line="48" selection-start-column="55" selection-end-line="48" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#12#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="635">
-          <caret line="94" column="44" selection-start-line="94" selection-start-column="44" selection-end-line="94" selection-end-column="44" />
+        <state relative-caret-position="401">
+          <caret line="145" column="77" selection-start-line="145" selection-start-column="77" selection-end-line="145" selection-end-column="77" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/converter.py">
+    <entry file="file://$PROJECT_DIR$/loader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="48" column="55" selection-start-line="48" selection-start-column="55" selection-end-line="48" selection-end-column="55" />
+        <state relative-caret-position="666">
+          <caret line="37" column="59" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/objectives.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
+        <state relative-caret-position="180">
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
