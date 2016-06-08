@@ -92,8 +92,8 @@ class Network:
         self.model.add(Flatten())
 
         self.model.add(Dense(256))
-        self.model.add(Dense(1024, activation='tanh'))
-        # self.model.add(LeakyReLU(alpha=0.1))
+        self.model.add(Dense(1024))
+        self.model.add(LeakyReLU(alpha=0.1))
         self.model.add(Dropout(.5))
 
         self.model.add(Dense(self.output))
@@ -108,11 +108,10 @@ class Network:
         validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                                     self.config['global']['files']['datasets']['train']))
 
-        stopping = EarlyStopping(monitor='val_loss', patience=10)
+        # stopping = EarlyStopping(monitor='val_loss', patience=10)
 
-        h = self.model.fit_generator(train_loader.flow(self.batch), validation_data=validation_loader.flow(self.batch),
-                                     samples_per_epoch=self.samples, nb_epoch=self.epochs,
-                                     nb_val_samples=validation_loader.size, callbacks=[stopping])
+        h = self.model.fit_generator(train_loader.flow(self.batch), samples_per_epoch=self.samples, 
+                                     nb_epoch=self.epochs)
 
         self.dump(h.history)
 

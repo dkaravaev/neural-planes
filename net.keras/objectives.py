@@ -36,24 +36,23 @@ class SingleDetectionLoss:
 
     @staticmethod
     def function(y_true, y_pred):
-        y1 = y_pred
-        y2 = y_true
         loss = 0.0
 
-        scale_vector = [2] * 4
+        scale_vector = [SingleDetectionLoss.PENALTY_OBJ] * 4
         scale_vector.extend([1] * 3)
-        scale_vector = numpy.reshape(numpy.asarray(scale_vector), (1, len(scale_vector)))
+        scale_vector = numpy.asarray(scale_vector)
 
         for i in range(49):
-            y1_piece = y1[:, i * 8:i * 8 + 7]
-            y2_piece = y2[:, i * 8:i * 8 + 7]
+            obj_true = y_true[:, i * 8:i * 8 + 7]
+            obj_pred = y_pred[:, i * 8:i * 8 + 7]
 
-            y1_piece = y1_piece * scale_vector
-            y2_piece = y2_piece * scale_vector
+            has_obj = y_true[:, i * 8 + 7]
+            pred_conf = y_pred[:, i * 8 + 7]
 
-            loss_piece = tensor.sum(tensor.square(y1_piece - y2_piece), axis=1)
-            loss += loss_piece * y2[:, i * 8 + 7]
-            loss += tensor.square(y2[:, i * 8 + 7] - y1[:, i * 8 + 7])
+            obj_loss = tensor.sum(tensor.mul(scale_vector, tensor.square(obj_true - obj_pred)), axis=1)
+
+            loss += tensor.mul(has_obj, obj_loss)
+            loss += tensor.square(has_obj - pred_conf)
 
         loss = tensor.sum(loss)
         return loss
