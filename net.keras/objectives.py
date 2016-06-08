@@ -14,16 +14,13 @@ class SingleDetectionLoss:
     def function(y_true, y_pred):
         loss = 0.0
 
-        scale_vector = [SingleDetectionLoss.PENALTY_OBJ] * 4
-        scale_vector.extend([1] * 3)
-        scale_vector = numpy.asarray(scale_vector)
-
+        scale_vector = numpy.asarray([SingleDetectionLoss.PENALTY_OBJ] * 4)
         for i in range(49):
             box_true = y_true[:, i * 8:i * 8 + 4]
             box_pred = y_pred[:, i * 8:i * 8 + 4]
 
-            has_obj = y_true[:, i * 8 + 4]
-            pred_conf = y_pred[:, i * 8 + 4]
+            has_obj = y_true[:, i * 8 + 7]
+            pred_conf = y_pred[:, i * 8 + 7]
 
             probs_true = y_true[:, i * 8 + 4:i * 8 + 7]
             probs_pred = y_pred[:, i * 8 + 4:i * 8 + 7]
@@ -32,7 +29,7 @@ class SingleDetectionLoss:
 
             loss += tensor.mul(has_obj, box_loss)
             loss += tensor.square(has_obj - pred_conf)
-            loss += tensor.square(probs_true - probs_pred)
+            loss += tensor.sum(tensor.square(probs_true - probs_pred), axis=1)
 
         loss = tensor.sum(loss)
         return loss
