@@ -22,7 +22,7 @@
         },
         "files":
         {
-            "backgrounds" : ["clearsky.jpg"],
+            "backgrounds" : ["clearsky.jpg", "light_cloudy.png", "cloudy.png"],
             "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ", "a380/A380.obj",
             			  "b737/Boeing737.obj", "f16/F-16C_FightingFalcon.obj", "su27/Su-27_Flanker.obj"],
             "datasets" : 
