@@ -42,15 +42,13 @@ class SingleDetectionMetrics:
 
     @staticmethod
     def accuracy(y_true, y_pred):
-        tensor.mean()
-
         acc = 0.0
 
         for i in range(49):
             acc += tensor.eq(y_true[:, i * 8:i * 8 + 4], y_pred[:, i * 8:i * 8 + 4])
             acc += tensor.eq(y_true[:, i * 8 + 4:i * 8 + 8], tensor.round(y_pred[:, i * 8 + 4:i * 8 + 8]))
 
-        acc = tensor.mean(tensor.sum(acc))
+        acc = tensor.sum(acc) / 19600
         return acc
 
 

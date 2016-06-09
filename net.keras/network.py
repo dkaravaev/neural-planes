@@ -119,16 +119,16 @@ class Network:
         dump_folder = os.path.join(self.config['global']['folders']['dumps'], 'dump_' + now)
         os.makedirs(dump_folder)
 
-        self.model.save_weights(os.path.join(dump_folder, 'weights_' + now + '.h5'))
+        self.model.save_weights(os.path.join(dump_folder, 'weights.h5'))
         json_model = self.model.to_json()
 
-        with open(os.path.join(dump_folder, 'model_' + now + '.json'), 'w') as f:
+        with open(os.path.join(dump_folder, 'model.json'), 'w') as f:
             f.write(json_model)
 
-        with open(os.path.join(dump_folder, 'history_' + now + '.json'), 'w') as f:
+        with open(os.path.join(dump_folder, 'history.json'), 'w') as f:
             json.dump(obj=history, fp=f, indent=4)
 
-        with open(os.path.join(dump_folder, 'config_' + now + '.json'), 'w') as f:
+        with open(os.path.join(dump_folder, 'config.json'), 'w') as f:
             json.dump(obj=self.config, fp=f, indent=4)
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
@@ -139,13 +139,15 @@ class Network:
         inp = numpy.asarray([inp[:, :, 0], inp[:, :, 1], inp[:, :, 2]])
 
         output = self.model.predict(numpy.asarray([inp]), batch_size=1)
-        dhandler = DetectionConverter()
+
+        side = self.config['global']['model']['side']
+        w = self.config['global']['image']['size'][0]
+        h = self.config['global']['image']['size'][0]
+        b = self.config['global']['model']['boxes']
+
+        dhandler = DetectionConverter(side, w, h, b)
 
         dhandler.overlay_results(image, output[0], result_path=result_path, threshold=threshold)
-
-    def from_darknet_weights(self):
-        return self.shape
-
 
 
 

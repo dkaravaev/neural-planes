@@ -88,6 +88,6 @@
             "momentum" : 0.9, 
             "nesterov" : true
         },
-        "weights" : "/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-09_02:22:19.456311/weights_2016-06-09_02:22:19.456311.h5" 
+        "weights" : null
     }
 }

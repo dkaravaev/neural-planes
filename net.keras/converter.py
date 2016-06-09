@@ -18,11 +18,11 @@ class Box:
 
 
 class DetectionConverter:
-    def __init__(self, config):
-        self.side = 7
-        self.w = 224
-        self.h = 224
-        self.b = 1
+    def __init__(self, side, w, h, b):
+        self.side = side
+        self.w = w
+        self.h = h
+        self.b = b
 
         self.cell_size = self.w / self.side
 
