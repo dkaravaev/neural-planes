@@ -6,7 +6,7 @@
             "datasets" : "/home/dmitry/data/neural-planes/datasets/",
             "backgrounds" : "/home/dmitry/data/neural-planes/backgrounds/",
             "3dmodels" : "/home/dmitry/data/neural-planes/models/",
-            "dumps" : "/home/dmitry/Yandex.Disk/Diploma/dumps/",
+            "dumps" : "/home/dmitry/source/neural-planes/dumps/",
             "annotations" : 
             {
                 "train" : "/home/dmitry/data/neural-planes/annotations/train/",
@@ -23,7 +23,8 @@
         "files":
         {
             "backgrounds" : ["clearsky.jpg"],
-            "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ"],
+            "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ", "a380/A380.obj",
+                          "b737/Boeing737.obj", "f16/F-16C_FightingFalcon.obj", "su27/Su-27_Flanker.obj"],
             "datasets" : 
             {
                 "train" : "neural-planes_train.hdf5",
@@ -48,8 +49,8 @@
         "number" :
         {
             "train" : 50000,
-            "validation" : 5000,
-            "test" : 5000
+            "validation" : 2000,
+            "test" : 2000
         },
         "3dmodel":
         {
@@ -64,7 +65,11 @@
             {
                 "f14/F-14A_Tomcat.obj" : "fighter", 
                 "v101/Emirates_V101LR.obj" : "civil-plane",
-                "gull/GULL.OBJ" : "bird"
+                "gull/GULL.OBJ" : "bird",
+                "a380/A380.obj" : "civil-plane", 
+                "b737/Boeing737.obj" : "civil-plane",
+                "f16/F-16C_FightingFalcon.obj" : "fighter",
+                "su27/Su-27_Flanker.obj" : "fighter"
             }
         },
         "effects":
@@ -78,8 +83,8 @@
         "training":
         {
             "batch" : 50,
-            "samples" : 50000,
-            "epochs" : 20
+            "samples" : 10000,
+            "epochs" : 100
         },
         "SGD" :
         {
@@ -88,6 +93,6 @@
             "momentum" : 0.9, 
             "nesterov" : true
         },
-        "weights" : "/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-09_02:22:19.456311/weights_2016-06-09_02:22:19.456311.h5" 
+        "weights" : null
     }
 }

@@ -39,9 +39,8 @@ class ImageHandler:
 
         return img
 
-    def overlaid_img(self, rotation_x, rotation_y, rotation_z, size, noise, blur):
+    def overlaid_img(self, rotation_x, rotation_y, rotation_z, size, blur):
         self.blur = blur
-        self.noise = noise
 
         img = self.trans_img(rotation_x, rotation_y, rotation_z, size)
         subprocess.call(['rm', self.result_filename])
@@ -55,7 +54,8 @@ class ImageHandler:
 
         background.save(self.result_filename, 'PNG')
 
-        subprocess.call(['mogrify', '+noise', noise, '-blur', str(blur), self.result_filename])
+        # Python image magic interface
+        subprocess.call(['mogrify', '-blur', str(blur), self.result_filename])
 
         self.bb = pos_x, pos_y, pos_x + img.size[0], pos_y + img.size[1]
         return

@@ -27,7 +27,6 @@ class ImageGenerator:
         self.rotation_z = self.config['gendata']['3dmodel']['rotation']['z']
 
         self.size = self.config['gendata']['3dmodel']['size']
-        self.noise = self.config['gendata']['effects']['noise']
         self.blur = self.config['gendata']['effects']['blur']
 
         random.seed()
@@ -71,7 +70,7 @@ class ImageGenerator:
             size_y = random.randint(self.size[0], self.size[1])
 
             img.overlaid_img(self.rotation_x, self.rotation_y, self.rotation_z,
-                             (size_x, size_y), self.noise, self.blur)
+                             (size_x, size_y), self.blur)
             object_class = self.classmap[self.models[model_index]]
             img.to_xml(os.path.join(xml_folder, name + '.xml'), object_class)
 

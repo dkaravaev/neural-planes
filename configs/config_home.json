@@ -23,7 +23,8 @@
         "files":
         {
             "backgrounds" : ["clearsky.jpg"],
-            "3dmodels" : ["f14.obj", "v101.obj", "gull.obj"],
+            "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ", "a380/A380.obj",
+            			  "b737/Boeing737.obj", "f16/F-16C_FightingFalcon.obj", "su27/Su-27_Flanker.obj"],
             "datasets" : 
             {
                 "train" : "neural-planes_train.hdf5",
@@ -62,14 +63,17 @@
             },
             "classmap":
             {
-                "f14.obj" : "fighter", 
-                "v101.obj" : "civil-plane",
-                "gull.obj" : "bird"
+                "f14/F-14A_Tomcat.obj" : "fighter", 
+                "v101/Emirates_V101LR.obj" : "civil-plane",
+                "gull/GULL.OBJ" : "bird",
+                "a380/A380.obj" : "civil-plane", 
+				"b737/Boeing737.obj" : "civil-plane",
+				"f16/F-16C_FightingFalcon.obj" : "fighter",
+				"su27/Su-27_Flanker.obj" : "fighter"
             }
         },
         "effects":
         {
-            "noise" : "Gaussian",
             "blur" : 20
         }
     },
