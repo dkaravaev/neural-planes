@@ -98,13 +98,15 @@ class Network:
         train_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                                self.config['global']['files']['datasets']['train']))
 
-        # validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
-        #                                             self.config['global']['files']['datasets']['train']))
+        validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
+                                                    self.config['global']['files']['datasets']['validation']),
+                                                    random=False)
 
-        # stopping = EarlyStopping(monitor='val_loss', patience=10)
+        stopping = EarlyStopping(monitor='val_loss', patience=10)
 
         h = self.model.fit_generator(train_loader.flow(self.batch), samples_per_epoch=self.samples,
-                                     nb_epoch=self.epochs)
+                                     nb_epoch=self.epochs, validation_data=validation_loader.flow(self.batch),
+                                     callbacks=[stopping], nb_val_samples=validation_loader.size)
 
         self.dump(h.history)
 
