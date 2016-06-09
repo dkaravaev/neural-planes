@@ -11,9 +11,9 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.callbacks import EarlyStopping
 
-from objectives import SingleDetectionLoss
+from objectives import SingleDetectionMetrics
 from loader import DataLoader
-from converter import DetectionHandler
+from converter import DetectionConverter
 
 # TODO: CHECK CORRECTNESS OF DATA FLOW
 # TODO: MAKE LOSS FUNCTIONS!!!!
@@ -23,20 +23,6 @@ from converter import DetectionHandler
 
 
 class Network:
-    """
-    Model Input: Image in RGB
-    Model Output:
-        SIDE x SIDE x CLASSES:
-            P_{ijk}
-            - Probability of ij-cell has object with k-class
-        SIDE x SIDE x B:
-            scale_{ij0} ... scale_{ijB}
-            - Class scales for each bounding box in ij-cell
-        SIDE x SIDE x B x 4:
-            (x_{ij0}, y_{ij0}, sqrt(h_{ij0}), sqrt(w_{ij0})) ... (x_{ijB}, y_{ijB}, sqrt(h_{ijB}), sqrt(w_{ijB}))
-            - Bounding box definition in each ij-cell
-        TOTAL = SIDE x SIDE x CLASSES + SIDE x SIDE x B + SIDE x SIDE x B x 4 = SIDE x SIDE x (B x 5 + CLASSES)
-    """
     def __init__(self, filename):
         print('Config file: ' + filename)
         self.config = json.load(open(filename, 'r'))
@@ -96,23 +82,28 @@ class Network:
         self.model.add(Dense(1024))
         self.model.add(LeakyReLU(alpha=0.1))
 
-        # self.model.add(Dropout(.5))
+        self.model.add(Dropout(.5))
 
         self.model.add(Dense(self.output, activation='sigmoid'))
 
         sgd = SGD(lr=self.lr, decay=self.decay, momentum=self.momentum, nesterov=self.nesterov)
-        self.model.compile(optimizer=sgd, loss=SingleDetectionLoss.function, metrics=['accuracy'])
+        self.model.compile(optimizer=sgd, loss=SingleDetectionMetrics.function,
+                           metrics=[SingleDetectionMetrics.accuracy])
+
+        weights_file = self.config['net']['weights']
+        if not (weights_file is None):
+            self.model.load_weights(weights_file)
 
     def train(self):
         train_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
                                                self.config['global']['files']['datasets']['train']))
 
-        validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
-                                                    self.config['global']['files']['datasets']['train']))
+        # validation_loader = DataLoader(os.path.join(self.config['global']['folders']['datasets'],
+        #                                             self.config['global']['files']['datasets']['train']))
 
         # stopping = EarlyStopping(monitor='val_loss', patience=10)
 
-        h = self.model.fit_generator(train_loader.flow(self.batch), samples_per_epoch=self.samples, 
+        h = self.model.fit_generator(train_loader.flow(self.batch), samples_per_epoch=self.samples,
                                      nb_epoch=self.epochs)
 
         self.dump(h.history)
@@ -142,19 +133,15 @@ class Network:
 
         os.system('yandex-disk sync --dir=~/Yandex.Disk')
 
-    def predict(self, image_path, weights='/home/dmitry/Yandex.Disk/Diploma/dumps/dump_2016-06-09_00:19:24.023477/'
-                                          'weights_2016-06-09_00:19:24.023477.h5', threshold=0.0):
-        # if not(weights is None):
-        self.model.load_weights(weights)
-
+    def predict(self, image_path, result_path, threshold=0.5):
         image = Image.open(image_path)
         inp = numpy.asarray(image) / 255
         inp = numpy.asarray([inp[:, :, 0], inp[:, :, 1], inp[:, :, 2]])
 
         output = self.model.predict(numpy.asarray([inp]), batch_size=1)
-        dhandler = DetectionHandler()
+        dhandler = DetectionConverter()
 
-        dhandler.overlay_results(image, output[0], threshold=threshold)
+        dhandler.overlay_results(image, output[0], result_path=result_path, threshold=threshold)
 
     def from_darknet_weights(self):
         return self.shape

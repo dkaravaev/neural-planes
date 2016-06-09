@@ -17,8 +17,8 @@ class Box:
         return '%f %f %f %f %d %f' % (self.x, self.y, self.h, self.w, self.class_num, self.prob)
 
 
-class DetectionHandler:
-    def __init__(self):
+class DetectionConverter:
+    def __init__(self, config):
         self.side = 7
         self.w = 224
         self.h = 224
@@ -28,23 +28,23 @@ class DetectionHandler:
 
         self.classes = ['fighter', 'civil-plane', 'bird']
 
-    def convert_output(self, output, threshold):
-        output = output.reshape(self.side, self.side, self.b * 5 + len(self.classes))
+    def convert_output(self, predictions, threshold):
+        predictions = predictions.reshape(self.side, self.side, self.b * 5 + len(self.classes))
 
         boxes = []
         for row in range(self.side):
             for col in range(self.side):
-                probs = output[row, col, 7] * output[row, col, 4:7]
+                probs = predictions[row, col, 7] * predictions[row, col, 4:7]
                 prob = numpy.max(probs)
 
                 if prob >= threshold:
                     box = Box()
                     box.prob = prob
-                    box.x = self.cell_size * (output[row, col, 0] + col)
-                    box.y = self.cell_size * (output[row, col, 1] + row)
+                    box.x = self.cell_size * (predictions[row, col, 0] + col)
+                    box.y = self.cell_size * (predictions[row, col, 1] + row)
 
-                    box.w = 224 * (math.pow(output[row, col, 2], 2))
-                    box.h = 224 * (math.pow(output[row, col, 3], 2))
+                    box.w = 224 * (math.pow(predictions[row, col, 2], 2))
+                    box.h = 224 * (math.pow(predictions[row, col, 3], 2))
 
                     box.class_num = numpy.argmax(probs)
 
@@ -52,18 +52,22 @@ class DetectionHandler:
 
         return boxes
 
-    def overlay_results(self, image, output, threshold):
-        boxes = self.convert_output(output, threshold)
+    def overlay_results(self, image, predictions, result_path, threshold):
+        boxes = self.convert_output(predictions, threshold)
 
         draw = ImageDraw.Draw(image)
 
         colors = ['red', 'green', 'blue']
 
         for box in boxes:
+            print('Found {0} with P = {1} at (x = {2}, y = {3}, w = {4}, h ={5})'.format(self.classes[box.class_num],
+                                                                                         box.prob, box.x, box.y, box.w,
+                                                                                         box.h))
+
             xmin = box.x - box.w / 2
             xmax = box.x + box.w / 2
             ymin = box.y - box.h / 2
             ymax = box.y + box.h / 2
             draw.rectangle(((xmin, ymin), (xmax, ymax)), outline=colors[box.class_num])
 
-        image.save('result.png')
+        image.save(result_path)

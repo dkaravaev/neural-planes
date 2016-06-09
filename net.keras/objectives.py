@@ -7,14 +7,19 @@ boxes = 2
 classes = ["fighter", "civil-plane", "bird"]
 
 
-class SingleDetectionLoss:
+class SingleDetectionMetrics:
+    """
+    INPUT FORMAT:
+        y_true = Tensor, dim(y_true) = (batch, side * side * (classes + obj + x + y + w + h))
+        y_pred ~ y_true
+    """
     PENALTY_OBJ = 4
 
     @staticmethod
     def function(y_true, y_pred):
         loss = 0.0
 
-        scale_vector = numpy.asarray([SingleDetectionLoss.PENALTY_OBJ] * 4)
+        scale_vector = numpy.asarray([SingleDetectionMetrics.PENALTY_OBJ] * 4)
         for i in range(49):
             box_true = y_true[:, i * 8:i * 8 + 4]
             box_pred = y_pred[:, i * 8:i * 8 + 4]
@@ -35,8 +40,35 @@ class SingleDetectionLoss:
         loss = tensor.sum(loss)
         return loss
 
+    @staticmethod
+    def accuracy(y_true, y_pred):
+        tensor.mean()
 
-class MultiDetectionLoss:
+        acc = 0.0
+
+        for i in range(49):
+            acc += tensor.eq(y_true[:, i * 8:i * 8 + 4], y_pred[:, i * 8:i * 8 + 4])
+            acc += tensor.eq(y_true[:, i * 8 + 4:i * 8 + 8], tensor.round(y_pred[:, i * 8 + 4:i * 8 + 8]))
+
+        acc = tensor.mean(tensor.sum(acc))
+        return acc
+
+
+class MultiDetectionMetrics:
+    """
+    Model Input: Image in RGB
+    Model Output:
+        SIDE x SIDE x CLASSES:
+            P_{ijk}
+            - Probability of ij-cell has object with k-class
+        SIDE x SIDE x B:
+            scale_{ij0} ... scale_{ijB}
+            - Class scales for each bounding box in ij-cell
+        SIDE x SIDE x B x 4:
+            (x_{ij0}, y_{ij0}, sqrt(h_{ij0}), sqrt(w_{ij0})) ... (x_{ijB}, y_{ijB}, sqrt(h_{ijB}), sqrt(w_{ijB}))
+            - Bounding box definition in each ij-cell
+        TOTAL = SIDE x SIDE x CLASSES + SIDE x SIDE x B + SIDE x SIDE x B x 4 = SIDE x SIDE x (B x 5 + CLASSES)
+    """
     @staticmethod
     def overlap(x1, w1, x2, w2):
         x1 /= side
@@ -51,8 +83,8 @@ class MultiDetectionLoss:
 
     @staticmethod
     def box_intersection(a, b):
-        w = MultiDetectionLoss.overlap(a[:, :, 0], a[:, :, 3], b[:, :, 0], b[:, :, 3])
-        h = MultiDetectionLoss.overlap(a[:, :, 1], a[:, :, 2], b[:, :, 1], b[:, :, 2])
+        w = MultiDetectionMetrics.overlap(a[:, :, 0], a[:, :, 3], b[:, :, 0], b[:, :, 3])
+        h = MultiDetectionMetrics.overlap(a[:, :, 1], a[:, :, 2], b[:, :, 1], b[:, :, 2])
         w = tensor.switch(tensor.lt(w, 0), 0, w)
         h = tensor.switch(tensor.lt(h, 0), 0, h)
         area = w * h
@@ -60,7 +92,7 @@ class MultiDetectionLoss:
 
     @staticmethod
     def box_union(a, b):
-        i = MultiDetectionLoss.box_intersection(a, b)
+        i = MultiDetectionMetrics.box_intersection(a, b)
         area_a = a[:, :, 2] * a[:, :, 3]
         area_b = b[:, :, 2] * b[:, :, 3]
         u = area_a*area_a + area_b*area_b - i
@@ -68,8 +100,8 @@ class MultiDetectionLoss:
 
     @staticmethod
     def box_iou(a, b):
-        u = MultiDetectionLoss.box_union(a, b)
-        i = MultiDetectionLoss.box_intersection(a, b)
+        u = MultiDetectionMetrics.box_union(a, b)
+        i = MultiDetectionMetrics.box_intersection(a, b)
         iou = tensor.switch(tensor.eq(u, 0), 0, i/u)
         return iou
 
@@ -111,14 +143,14 @@ class MultiDetectionLoss:
         b = y_pred[:, :, 5:9]
         gt = y_true[:, :, 0:4]
 
-        iou_a_gt = MultiDetectionLoss.box_iou(a_offset, gt_offset)
+        iou_a_gt = MultiDetectionMetrics.box_iou(a_offset, gt_offset)
         iou_a_gt = gradient.disconnected_grad(iou_a_gt)
 
-        iou_b_gt = MultiDetectionLoss.box_iou(b_offset, gt_offset)
+        iou_b_gt = MultiDetectionMetrics.box_iou(b_offset, gt_offset)
         iou_b_gt = gradient.disconnected_grad(iou_b_gt)
 
-        mse_a_gt = MultiDetectionLoss.box_mse(a_offset, gt_offset)
-        mse_b_gt = MultiDetectionLoss.box_mse(b_offset, gt_offset)
+        mse_a_gt = MultiDetectionMetrics.box_mse(a_offset, gt_offset)
+        mse_b_gt = MultiDetectionMetrics.box_mse(b_offset, gt_offset)
 
         mask = tensor.switch(tensor.lt(iou_a_gt, iou_b_gt), 1, 0)
 
