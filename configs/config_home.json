@@ -83,7 +83,7 @@
         {
             "batch" : 50,
             "samples" : 10000,
-            "epochs" : 200
+            "epochs" : 130
         },
         "SGD" :
         {

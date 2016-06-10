@@ -36,7 +36,7 @@ class DataLoader:
         x = self.file['x'][self.offset:self.offset + batch]
         y = self.file['y'][self.offset:self.offset + batch]
 
-        self.offset += batch
+        self.offset = (self.offset + batch) % self.size
 
         return x, y
 
