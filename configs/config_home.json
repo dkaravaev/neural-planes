@@ -23,8 +23,7 @@
         "files":
         {
             "backgrounds" : ["clearsky.jpg", "light_cloudy.png", "cloudy.png"],
-            "3dmodels" : ["f14/F-14A_Tomcat.obj", "v101/Emirates_V101LR.obj", "gull/GULL.OBJ", "a380/A380.obj",
-            			  "b737/Boeing737.obj", "f16/F-16C_FightingFalcon.obj", "su27/Su-27_Flanker.obj"],
+            "3dmodels" : ["su27/Su-27_Flanker.obj", "a380/A380.obj", "gull/GULL.OBJ"],
             "datasets" : 
             {
                 "train" : "neural-planes_train.hdf5",
@@ -63,13 +62,9 @@
             },
             "classmap":
             {
-                "f14/F-14A_Tomcat.obj" : "fighter", 
-                "v101/Emirates_V101LR.obj" : "civil-plane",
-                "gull/GULL.OBJ" : "bird",
+                "su27/Su-27_Flanker.obj" : "fighter",
                 "a380/A380.obj" : "civil-plane", 
-				"b737/Boeing737.obj" : "civil-plane",
-				"f16/F-16C_FightingFalcon.obj" : "fighter",
-				"su27/Su-27_Flanker.obj" : "fighter"
+                "gull/GULL.OBJ" : "bird"
             }
         },
         "effects":
@@ -83,7 +78,7 @@
         {
             "batch" : 50,
             "samples" : 10000,
-            "epochs" : 130
+            "epochs" : 210
         },
         "SGD" :
         {
@@ -92,6 +87,6 @@
             "momentum" : 0.9, 
             "nesterov" : true
         },
-        "weights" : null
+        "weights" : "/home/dmitry/source/neural-planes/dumps/dump_2016-06-11_00:41:47.707717/weights.h5"
     }
 }

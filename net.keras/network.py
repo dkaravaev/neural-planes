@@ -102,11 +102,9 @@ class Network:
                                                     self.config['global']['files']['datasets']['validation']),
                                                     random=False)
 
-        stopping = EarlyStopping(monitor='val_loss', patience=10)
-
         h = self.model.fit_generator(train_loader.flow(self.batch), samples_per_epoch=self.samples,
                                      nb_epoch=self.epochs, validation_data=validation_loader.flow(self.batch),
-                                     callbacks=[stopping], nb_val_samples=validation_loader.size)
+                                     nb_val_samples=validation_loader.size)
 
         self.dump(h.history)
 

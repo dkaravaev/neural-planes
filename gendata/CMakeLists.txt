@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4)
-project(model_render)
+project(gendata)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp -I/usr/include/ImageMagick -I/usr/local/include -Iinclude")
 
 find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIRS})
@@ -19,7 +19,7 @@ if(NOT OPENGL_FOUND)
     message(ERROR "OpenGL not found!")
 endif(NOT OPENGL_FOUND)
 
-set(SOURCE_FILES main.cpp SnapImageDrawCallback.hxx SceneHandler.hxx Utils.hxx)
-add_executable(model_render ${SOURCE_FILES})
-target_link_libraries(model_render ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}
-        "-lOpenThreads -losg -losgUtil -losgText -losgDB -losgGA -losgViewer")
+set(SOURCE_FILES main.cxx SceneLoader.hxx Utils.hxx ImageGenerator.hxx ModelImage.hxx)
+add_executable(gendata ${SOURCE_FILES})
+target_link_libraries(gendata ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}
+        "-lOpenThreads -losg -losgUtil -losgText -losgDB -losgGA -losgViewer -lMagick++ -lMagickCore -ltinyxml2 -ljsoncpp  -L/usr/local/lib/x86_64-linux-gnu -Llib")
