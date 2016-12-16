@@ -16,5 +16,19 @@ For solving this problem of was using modified and deeply simplified version of 
 
 ## Some results
 
+Civil plane class with probability 0.4:
+![alt text](https://github.com/dkaravaev/neural-planes/blob/master/results/civil_pr40.png)
 
+Fighter plane class with probability 0.47:
+![alt text](https://github.com/dkaravaev/neural-planes/blob/master/results/fighter_pr47.png)
 
+Fighter plane class with probability 0.58:
+![alt text](https://github.com/dkaravaev/neural-planes/blob/master/results/fighter_pr58.png)
+
+## Architecture
+
+All settings of programm are written in config.json. 
+
+1. Gendata
+2. Archdata
+3. Network
