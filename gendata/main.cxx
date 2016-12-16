@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
     if (!success)
     {
-        std::cout  << "Failed to parse configuration\n"  << reader.getFormattedErrorMessages();
+        std::cerr  << "Failed to parse configuration\n"  << reader.getFormattedErrorMessages();
         return EXIT_FAILURE;
     }
 
@@ -54,8 +54,6 @@ int main(int argc, char** argv)
 
     generate_data(validation_num, config["global"]["folders"]["images"]["validation"].asString(),
                   config["global"]["folders"]["annotations"]["validation"].asString(), generator);
-
-
 
     return EXIT_SUCCESS;
 }

@@ -15,12 +15,6 @@ from objectives import SingleDetectionMetrics
 from loader import DataLoader
 from converter import DetectionConverter
 
-# TODO: CHECK CORRECTNESS OF DATA FLOW
-# TODO: MAKE LOSS FUNCTIONS!!!!
-# TODO: CONVERT PREDICTIONS!
-# TODO: WHY WITH RANDOM DATA ALL WORKS???
-# TODO: MAKE BETTER RANDOM IN LOADER!
-
 
 class Network:
     def __init__(self, filename):
@@ -91,7 +85,7 @@ class Network:
                            metrics=[SingleDetectionMetrics.accuracy])
 
         weights_file = self.config['net']['weights']
-        if not (weights_file is None):
+        if not weights_file:
             self.model.load_weights(weights_file)
 
     def train(self):
